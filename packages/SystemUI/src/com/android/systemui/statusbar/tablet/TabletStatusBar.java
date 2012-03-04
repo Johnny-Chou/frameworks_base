@@ -92,6 +92,7 @@ import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.Prefs;
 import com.android.systemui.statusbar.policy.toggles.TogglesView;
+import com.android.systemui.statusbar.policy.CenterClock; // CENTRECLOCK: added for centre clock 
 
 public class TabletStatusBar extends StatusBar implements
         HeightReceiver.OnBarHeightChangedListener,
@@ -203,6 +204,7 @@ public class TabletStatusBar extends StatusBar implements
     public Context getContext() { return mContext; }
     
     TogglesView mQuickToggles;
+    CenterClock mCenterClock; // CENTRECLOCK: added for centre clock
 
     private StorageManager mStorageManager;
 
@@ -486,6 +488,7 @@ public class TabletStatusBar extends StatusBar implements
         } catch (RemoteException ex) {
         }
 
+	mCenterClock = (CenterClock) sb.findViewById(R.id.center_clock); // CENTRECLOCK: added for centre clock
         mBarContents = (ViewGroup) sb.findViewById(R.id.bar_contents);
 
         // the whole right-hand side of the bar
@@ -963,8 +966,19 @@ public class TabletStatusBar extends StatusBar implements
     public void showClock(boolean show) {
         View clock = mBarContents.findViewById(R.id.clock);
         View network_text = mBarContents.findViewById(R.id.network_text);
+
+// CENTRECLOCK: added for centre clock
+	if (mTicking)
+	    return;
+// END CENTRECLOCK
         if (clock != null) {
-            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+// CENTRECLOCK: added for centre clock
+//            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+	    CenterClock cclock = (CenterClock) mStatusBarView.findViewById(R.id.center_clock);
+	    if (cclock != null) {
+		cclock.updateVisibilityFromStatusBar(show);
+	    }
+// END CENTRECLOCK
         }
         if (network_text != null) {
             network_text.setVisibility((!show) ? View.VISIBLE : View.GONE);
@@ -1061,6 +1075,7 @@ public class TabletStatusBar extends StatusBar implements
                             | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
                 mTicker.add(key, n);
                 mFeedbackIconArea.setVisibility(View.GONE);
+		mCenterClock.updateVisibilityFromStatusBar(false); // CENTRECLOCK: added for centre clock
             }
         }
     }
@@ -1068,6 +1083,7 @@ public class TabletStatusBar extends StatusBar implements
     // called by TabletTicker when it's done with all queued ticks
     public void doneTicking() {
         mFeedbackIconArea.setVisibility(View.VISIBLE);
+	mCenterClock.updateVisibilityFromStatusBar(true); // CENTRECLOCK: added for centre clock
     }
 
     public void animateExpand() {
