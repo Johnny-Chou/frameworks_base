@@ -2575,55 +2575,6 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
-         * launch a custom app for sms
-         * 
-         * @hide
-         */
-        /** public static final String LOCKSCREEN_CUSTOM_SMS_INTENT = "lockscreen_custom_sms_intent";
-        
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_1 = "lockscreen_custom_app_intent_1";
-        
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_2 = "lockscreen_custom_app_intent_2";
-        
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_3 = "lockscreen_custom_app_intent_3";
-        
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_5 = "lockscreen_custom_app_intent_5";
-        
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_6 = "lockscreen_custom_app_intent_6";
-                     
-        /**
-         * launch a custom app
-         * 
-         * @hide
-         */
-        public static final String LOCKSCREEN_CUSTOM_APP_INTENT_7 = "lockscreen_custom_app_intent_7";
-
-        /**
          * Toggle to force multiwaveview lockscreen silent mode toggle even if
          * we have a camera.
          * 
@@ -2649,6 +2600,24 @@ public final class Settings {
         };
 
         /**
+         * Drawable URIs, each index needs to be matched up to LOCKSCREEN_CUSTOM_APP_ACTIVITIES
+         *
+         * OR ELSE
+         *
+         * @hide
+         */
+        public static final String[] LOCKSCREEN_CUSTOM_APP_ICONS = new String[] {
+                "lockscreen_custom_app_icon_0",
+                "lockscreen_custom_app_icon_1",
+                "lockscreen_custom_app_icon_2",
+                "lockscreen_custom_app_icon_3",
+                "lockscreen_custom_app_icon_4",
+                "lockscreen_custom_app_icon_5",
+                "lockscreen_custom_app_icon_6",
+                "lockscreen_custom_app_icon_7",
+        };
+
+        /**
          * Whether volume up/down can be long pressed to skip tracks
          * @hide
          */
@@ -2659,6 +2628,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_BATTERY = "lockscreen_battery";
+        
+        /**
+         * Setting to allow % on lockscreen at low battery.
+         * @hide
+         */
+        public static final String LOCKSCREEN_LOW_BATTERY = "lockscreen_low_battery";
         
         /**
          * 
@@ -2867,6 +2842,19 @@ public final class Settings {
          */
         public static final String STATUSBAR_HIDE_SIGNAL_BARS = "statusbar_hide_signal_bars";
 
+        /**
+         * Whether to show statusbar WiFi signal text
+         * 
+         * @hide
+         */
+        public static final String STATUSBAR_WIFI_SIGNAL_TEXT = "statusbar_wifi_signal_text";
+
+        /**
+         * statusbar WIFI signal text color
+         * 
+         * @hide
+         */
+        public static final String STATUSBAR_WIFI_SIGNAL_TEXT_COLOR = "statusbar_wifi_signal_text_color";
         /**
          * @hide
          */
