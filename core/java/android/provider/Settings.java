@@ -2876,6 +2876,68 @@ public final class Settings {
          * @hide
          */
         public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
+
+/**
+ ** TABLET TWEAKS !!!
+ **
+ ** all of the below code from SGT7 ICS TE4M's CM9 by sbradymobile
+ ** ported to AOKP by stimpz0r
+ **
+ **/
+
+        /**
+         * Whether to hide the soft home.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HIDE_SOFT_HOME_BUTTON = "hide_soft_home_button";
+
+        /**
+         * Whether to hide the soft recent button.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HIDE_SOFT_RECENT_BUTTON = "hide_soft_recent_button";
+
+        /**
+         * Whether to hide the soft back button.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HIDE_SOFT_BACK_BUTTON = "hide_soft_back_button";
+
+        /**
+         * Whether to hide the soft menu button.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HIDE_SOFT_MENU_BUTTON = "hide_soft_menu_button";
+
+        /**
+         * Whether to show larger thumbnails in recent items.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String LARGE_RECENT_THUMBNAILS = "large_recent_thumbnails";
+
+        /**
+         * Whether to show the soft tablet buttons on the right.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String RIGHT_SOFT_BUTTONS = "right_soft_buttons";
+
+        /**
+         * Whether to show notification peeks.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String SHOW_NOTIFICATION_PEEK = "show_notification_peek";
+
+        /**
+         * Whether to hide the status bar instead of shadowing it.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HIDE_STATUSBAR = "hide_statusbar";
+
+/**
+ ** TABLET TWEAKS !!!
+ **
+ **/
+
     }
 
     /**

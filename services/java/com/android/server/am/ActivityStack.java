@@ -60,6 +60,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -821,6 +822,19 @@ final class ActivityStack {
         }
 
         if (w > 0) {
+            boolean largeThumbnail = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LARGE_RECENT_THUMBNAILS, 0) == 1;
+            if (largeThumbnail) {
+                final int screenSize = Resources.getSystem().getConfiguration().screenLayout &
+                        Configuration.SCREENLAYOUT_SIZE_MASK;
+                boolean isScreenLarge = (screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                        screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) &&
+                        res.getDisplayMetrics().density <= 1f;
+                if (isScreenLarge) {
+                    w = w * 3 / 2;
+                    h = h * 3 / 2;
+                }
+            }
             return mService.mWindowManager.screenshotApplications(who.appToken, w, h);
         }
         return null;
