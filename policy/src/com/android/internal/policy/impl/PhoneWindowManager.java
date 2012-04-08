@@ -476,6 +476,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public static final String INTENT_TORCH_OFF = "com.android.systemui.INTENT_TORCH_OFF";
     boolean mFastTorchOn; // local state of torch
     boolean mEnableQuickTorch; // System.Setting
+    boolean mBackJustKilled;
+    boolean mLongPressBackKill;
 
     final KeyCharacterMap.FallbackAction mFallbackAction = new KeyCharacterMap.FallbackAction();
 
@@ -521,6 +523,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.ENABLE_FAST_TORCH), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_BUTTONS_SHOW), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this);
             updateSettings();
         }
 
@@ -779,6 +783,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                         break;
                     }
+                    mBackJustKilled = false;
                 }
             } catch (RemoteException remoteException) {
                 // Do nothing; just let it go.
@@ -1073,7 +1078,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT);
             int accelerometerDefault = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, DEFAULT_ACCELEROMETER_ROTATION);
-
+            mLongPressBackKill = (Settings.Secure.getInt(
+                    resolver, Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1);
             // set up rotation lock state
             mUserRotationMode = (accelerometerDefault == 0)
                 ? WindowManagerPolicy.USER_ROTATION_LOCKED
@@ -1691,7 +1697,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
-            mHandler.removeCallbacks(mBackLongPress);
+            if ((flags&KeyEvent.FLAG_CANCELED) == 0) {
+                mHandler.removeCallbacks(mBackLongPress);
+                KeyEvent.changeFlags(event, flags + KeyEvent.FLAG_CANCELED);
+                mBackJustKilled = false;
+            }
         }
 
         // First we always handle the home key here, so applications
@@ -1803,10 +1813,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1) {
-                if (down && repeatCount == 0) {
+            if (mLongPressBackKill) {
+                if (!mBackJustKilled && down && repeatCount == 0) {
                     mHandler.postDelayed(mBackLongPress, ViewConfiguration.getGlobalActionKeyTimeout());
+                    mBackJustKilled = true;
                 }
             }
         }
