@@ -2462,9 +2462,19 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_WEEKDAY = "statusbar_clock_weekday";
 
         /**
+        * @hide
+        */
+       public static final String STATUSBAR_FONT_SIZE = "statusbar_font_size";
+        
+        /**
          * @hide
          */
         public static final String STATUS_BAR_TRANSPARENCY = "status_bar_transparency";
+
+        /**
+         * @hide
+         */
+        public static final String STATUS_BAR_ICON_TRANSPARENCY = "status_bar_icon_transparency";
 
         /**
          * @hide
@@ -2615,21 +2625,6 @@ public final class Settings {
                 "navigation_custom_app_icon_2",
                 "navigation_custom_app_icon_3",
                 "navigation_custom_app_icon_4",
-        };
-        
-        /**
-         * Drawable URIs, each index needs to be matched up to NAVIGATION_CUSTOM_ACTIVITIES
-         *
-         * OR ELSE
-         *
-         * @hide
-         */
-        public static final String[] NAVIGATION_LANDSCAPE_APP_ICONS = new String[] {
-                "navigation_landscape_app_icon_0",
-                "navigation_landscape_app_icon_1",
-                "navigation_landscape_app_icon_2",
-                "navigation_landscape_app_icon_3",
-                "navigation_landscape_app_icon_4",
         };
         
         /**
@@ -2954,81 +2949,54 @@ public final class Settings {
          * @hide
          */
         public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
-
-/**
- ** TABLET TWEAKS !!!
- **
- ** all of the below code from SGT7 ICS TE4M's CM9 by sbradymobile
- ** ported to AOKP by stimpz0r
- **
- **/
+        
+        /**
+         * Whether to enable quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
 
         /**
-         * Whether to hide the soft home.  The value is boolean (1 or 0).
+         * Sets when quiet hours starts. This is stored in minutes from the start of the day.
          * @hide
          */
-        public static final String HIDE_SOFT_HOME_BUTTON = "hide_soft_home_button";
+        public static final String QUIET_HOURS_START = "quiet_hours_start";
 
         /**
-         * Whether to hide the soft recent button.  The value is boolean (1 or 0).
+         * Sets when quiet hours end. This is stored in minutes from the start of the day.
          * @hide
          */
-        public static final String HIDE_SOFT_RECENT_BUTTON = "hide_soft_recent_button";
+        public static final String QUIET_HOURS_END = "quiet_hours_end";
 
         /**
-         * Whether to hide the soft back button.  The value is boolean (1 or 0).
+         * Whether to remove the sound from outgoing notifications during quiet hours.
          * @hide
          */
-        public static final String HIDE_SOFT_BACK_BUTTON = "hide_soft_back_button";
-
-         /**
-         * Whether to force the soft menu button to show.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String FORCE_SOFT_MENU_BUTTON = "force_soft_menu_button";
+        public static final String QUIET_HOURS_NOTIFICATIONS = "quiet_hours_notifications";
 
         /**
-         * Whether to hide the soft menu button.  The value is boolean (1 or 0).
+         * Whether to mute phone ringtones during quiet hours.
          * @hide
          */
-        public static final String HIDE_SOFT_MENU_BUTTON = "hide_soft_menu_button";
+        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
 
         /**
-         * Whether to show larger thumbnails in recent items.  The value is boolean (1 or 0).
+         * Whether to disable vibrations during quiet hours.
          * @hide
          */
-        public static final String LARGE_RECENT_THUMBNAILS = "large_recent_thumbnails";
+        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
 
         /**
-         * Whether to show the soft tablet buttons on the right.  The value is boolean (1 or 0).
+         * Whether to attempt to dim the LED color during quiet hours.
          * @hide
          */
-        public static final String RIGHT_SOFT_BUTTONS = "right_soft_buttons";
+        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
-         * Whether to show notification peeks.  The value is boolean (1 or 0).
+         * Color to tint the nav bar glow
          * @hide
          */
-        public static final String SHOW_NOTIFICATION_PEEK = "show_notification_peek";
-
-        /**
-         * Whether to hide the status bar instead of shadowing it.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String HIDE_STATUSBAR = "hide_statusbar";
-
-         /**
-         * Whether to use jpeg compression for screenshots.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String SCREENSHOTS_JPEG = "screenshots_jpg";
-
-
-/**
- ** TABLET TWEAKS !!!
- **
- **/
-
+        public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
     }
 
     /**
