@@ -349,6 +349,9 @@
     <!-- status message in phone options dialog for when airplane mode is off -->
     <string name="global_actions_airplane_mode_off_status">Airplane mode is OFF</string>
 
+    <!-- label in options dialog to toggle statusbar visibility -->
+    <string name="global_actions_toggle_statusbar">Toggle statusbar</string>
+
     <!-- label for item that toggles power saver mode -->
     <string name="global_actions_toggle_power_saver">Power saver mode</string>
 

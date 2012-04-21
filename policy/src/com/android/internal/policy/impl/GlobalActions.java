@@ -92,7 +92,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mEnableTorchToggle = true;
     private boolean mEnableAirplaneToggle = true;
     private boolean mReceiverRegistered = false;    
-    private boolean mEnableNavBarHideToggle = false;;
+    private boolean mEnableNavBarHideToggle = false;
 
     public static final String INTENT_TORCH_ON = "com.android.systemui.INTENT_TORCH_ON";
     public static final String INTENT_TORCH_OFF = "com.android.systemui.INTENT_TORCH_OFF";
@@ -300,7 +300,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         } else {
             Slog.e(TAG, "not adding AirplaneToggle");
         }
-        
+
         // next: power saver
         try {
             Settings.Secure.getInt(mContext.getContentResolver(),

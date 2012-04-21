@@ -2981,6 +2981,12 @@ public final class Settings {
          */
         public static final String HIDE_SOFT_BACK_BUTTON = "hide_soft_back_button";
 
+         /**
+         * Whether to force the soft menu button to show.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String FORCE_SOFT_MENU_BUTTON = "force_soft_menu_button";
+
         /**
          * Whether to hide the soft menu button.  The value is boolean (1 or 0).
          * @hide
@@ -3010,6 +3016,13 @@ public final class Settings {
          * @hide
          */
         public static final String HIDE_STATUSBAR = "hide_statusbar";
+
+         /**
+         * Whether to use jpeg compression for screenshots.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String SCREENSHOTS_JPEG = "screenshots_jpg";
+
 
 /**
  ** TABLET TWEAKS !!!
