@@ -81,6 +81,9 @@ import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarNotification;
 import com.android.systemui.R;
@@ -188,12 +191,12 @@ public class TabletStatusBar extends StatusBar implements
     View mRecentButton;
     ExtensibleKeyButtonView mTempMenuButton;
 
-    boolean mHideMenuButton;
+/*    boolean mHideMenuButton;
     boolean mHideBackButton;
     boolean mHideRecentButton;
     boolean mHideHomeButton;
     boolean mForceMenuButton;
-
+*/
     ViewGroup mFeedbackIconArea; // notification icons, IME icon, compat icon
     InputMethodButton mInputMethodSwitchButton;
     CompatModeButton mCompatModeButton;
@@ -1102,11 +1105,12 @@ public class TabletStatusBar extends StatusBar implements
     }
 
     private void setNavigationVisibility(int visibility) {
-        boolean disableHome = ((visibility & StatusBarManager.DISABLE_HOME) != 0);
+      
+        ContentResolver resolver = mContext.getContentResolver();
+	boolean disableHome = ((visibility & StatusBarManager.DISABLE_HOME) != 0);
         boolean disableRecent = ((visibility & StatusBarManager.DISABLE_RECENT) != 0);
         boolean disableBack = ((visibility & StatusBarManager.DISABLE_BACK) != 0);
-        ContentResolver resolver = mContext.getContentResolver();
-
+/*
         mBackButton.setVisibility(mHideBackButton ? View.GONE : (disableBack ? View.INVISIBLE :
                 View.VISIBLE));
         mHomeButton.setVisibility(mHideHomeButton ? View.GONE : (disableHome ? View.INVISIBLE :
@@ -1121,7 +1125,7 @@ public class TabletStatusBar extends StatusBar implements
             boolean disableMenu = disableBack && disableHome && disableRecent;
             mMenuButton.setVisibility(mHideMenuButton ? View.GONE : (disableMenu ?
                     View.INVISIBLE : View.VISIBLE));
-        }
+        } 
         /*  Need to address visibility
         mBackButton.setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
         mHomeButton.setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
@@ -1155,6 +1159,7 @@ public class TabletStatusBar extends StatusBar implements
 
     private void updateButtonVisibilitySettings() {
         ContentResolver resolver = mContext.getContentResolver();
+/*
         mHideHomeButton = (Settings.System.getInt(resolver,
                 Settings.System.HIDE_SOFT_HOME_BUTTON, 0) == 1);
         mHideRecentButton = (Settings.System.getInt(resolver,
@@ -1167,6 +1172,7 @@ public class TabletStatusBar extends StatusBar implements
                 Settings.System.FORCE_SOFT_MENU_BUTTON, 0) == 1);
 
         mMenuButton.setVisibility(mHideMenuButton ? View.GONE : (mForceMenuButton ? View.VISIBLE : View.INVISIBLE));
+*/
         setNavigationVisibility(0);
         setClockVisibility();
     }
@@ -1300,7 +1306,7 @@ public class TabletStatusBar extends StatusBar implements
         if (DEBUG) {
             Slog.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
-        if (!mHideMenuButton) mMenuButton.setVisibility(showMenu ? View.VISIBLE : View.INVISIBLE);
+//        if (!mHideMenuButton) mMenuButton.setVisibility(showMenu ? View.VISIBLE : View.INVISIBLE);
 
         // We will not show or hide the menu button if the user specifically created it for the
         // NavBar.  If they did not, we will temporarily create one.
@@ -2110,6 +2116,26 @@ public class TabletStatusBar extends StatusBar implements
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
+/*
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HIDE_SOFT_RECENT_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HIDE_SOFT_HOME_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HIDE_SOFT_BACK_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HIDE_SOFT_MENU_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+		    Settings.System.FORCE_SOFT_MENU_BUTTON), false, this);
+*/
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RIGHT_SOFT_BUTTONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_NOTIFICATION_PEEK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LARGE_RECENT_THUMBNAILS), false, this);
+
+
             // resolver.registerContentObserver(
             // Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_BUTTONS),
             // false,
@@ -2150,6 +2176,22 @@ public class TabletStatusBar extends StatusBar implements
         public void onChange(boolean selfChange) {
             updateSettings();
         }
+
+        public void onChangeUri(Uri uri, boolean selfChange) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.RIGHT_SOFT_BUTTONS)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.SHOW_NOTIFICATION_PEEK))) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LARGE_RECENT_THUMBNAILS))) {
+                mHandler.removeMessages(MSG_LARGE_THUMBS);
+                mHandler.sendEmptyMessage(MSG_LARGE_THUMBS);
+            } else {
+                mHandler.removeMessages(MSG_BUTTON_VISIBILITY);
+                mHandler.sendEmptyMessage(MSG_BUTTON_VISIBILITY);
+            }
+        }
+
+
     }
 
     protected void updateSettings() {
@@ -2327,48 +2369,6 @@ public class TabletStatusBar extends StatusBar implements
         mNetworkController.dump(fd, pw, args);
     }
 
-    private static class SettingsObserver extends ContentObserver {
-        private Handler mHandler;
-
-        SettingsObserver(Handler handler) {
-            super(handler);
-            mHandler = handler;
-        }
-
-        void observe(Context context) {
-            ContentResolver resolver = context.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HIDE_SOFT_RECENT_BUTTON), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HIDE_SOFT_HOME_BUTTON), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HIDE_SOFT_BACK_BUTTON), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HIDE_SOFT_MENU_BUTTON), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-		    Settings.System.FORCE_SOFT_MENU_BUTTON), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.RIGHT_SOFT_BUTTONS), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SHOW_NOTIFICATION_PEEK), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LARGE_RECENT_THUMBNAILS), false, this);
-        }
-
-        public void onChangeUri(Uri uri, boolean selfChange) {
-            if (uri.equals(Settings.System.getUriFor(Settings.System.RIGHT_SOFT_BUTTONS)) ||
-                    uri.equals(Settings.System.getUriFor(Settings.System.SHOW_NOTIFICATION_PEEK))) {
-                android.os.Process.killProcess(android.os.Process.myPid());
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.LARGE_RECENT_THUMBNAILS))) {
-                mHandler.removeMessages(MSG_LARGE_THUMBS);
-                mHandler.sendEmptyMessage(MSG_LARGE_THUMBS);
-            } else {
-                mHandler.removeMessages(MSG_BUTTON_VISIBILITY);
-                mHandler.sendEmptyMessage(MSG_BUTTON_VISIBILITY);
-            }
-        }
-    }
 }
 
 
