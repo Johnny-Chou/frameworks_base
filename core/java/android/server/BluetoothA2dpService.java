@@ -110,8 +110,6 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            BluetoothDevice device =
-                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                                                BluetoothAdapter.ERROR);
@@ -125,6 +123,8 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                 }
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 synchronized (this) {
+                    BluetoothDevice device =
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if (mAudioDevices.containsKey(device)) {
                         int state = mAudioDevices.get(device);
                         handleSinkStateChange(device, state, BluetoothA2dp.STATE_DISCONNECTED);
@@ -162,7 +162,8 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                         while (iterator.hasNext()) {
                             String key = iterator.next();
                             Object value = extras.get(key);
-                            Log.d(TAG, key + ": " + value.toString());
+                            if (value != null)
+                                Log.d(TAG, key + ": " + value.toString());
                         }
                     }
                 }
@@ -256,7 +257,8 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                         while (iterator.hasNext()) {
                             String key = iterator.next();
                             Object value = extras.get(key);
-                            Log.d(TAG, key + ": " + value.toString());
+                            if (value != null)
+                                Log.d(TAG, key + ": " + value.toString());
                         }
                     }
                 }

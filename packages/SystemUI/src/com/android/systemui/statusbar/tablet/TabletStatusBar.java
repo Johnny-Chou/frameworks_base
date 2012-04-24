@@ -537,6 +537,7 @@ public class TabletStatusBar extends StatusBar implements
             }
         } catch (RemoteException ex) {
         }
+
         mBarContents = (ViewGroup) sb.findViewById(R.id.bar_contents);
 
         // the whole right-hand side of the bar
@@ -678,6 +679,7 @@ public class TabletStatusBar extends StatusBar implements
         // set the initial view visibility
         setAreThereNotifications();
 
+        // Add the windows
         addPanelWindows();
         //mRecentButton.setOnTouchListener(mRecentsPanel);
 
@@ -848,31 +850,19 @@ public class TabletStatusBar extends StatusBar implements
                     break;
                 case MSG_SHOW_CHROME:
                     if (DEBUG) Slog.d(TAG, "hiding shadows (lights on)");
-		    boolean showStatusbar = (Settings.System.getInt(mContext.getContentResolver(),
-			Settings.System.HIDE_STATUSBAR, 0) == 1);
-                    if (showStatusbar && ((mDisabled & 0x10000000) == 0)) {
-                        mStatusBarView.setVisibility(View.VISIBLE);
-                    } else {
-                        mBarContents.setVisibility(View.VISIBLE);
-                        mShadow.setVisibility(View.GONE);
-                        mSystemUiVisibility &= ~View.SYSTEM_UI_FLAG_LOW_PROFILE;
-                        notifyUiVisibilityChanged();
-                    }
+                    mBarContents.setVisibility(View.VISIBLE);
+                    mShadow.setVisibility(View.GONE);
+                    mSystemUiVisibility &= ~View.SYSTEM_UI_FLAG_LOW_PROFILE;
+                    notifyUiVisibilityChanged();
                     break;
                 case MSG_HIDE_CHROME:
                     if (DEBUG) Slog.d(TAG, "showing shadows (lights out)");
-                    boolean hideStatusbar = (Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.HIDE_STATUSBAR, 0) == 1);
                     animateCollapse();
                     visibilityChanged(false);
-                    if (hideStatusbar) {
-                        mStatusBarView.setVisibility(View.GONE);
-                    } else {
-                        mBarContents.setVisibility(View.GONE);
-                        mShadow.setVisibility(View.VISIBLE);
-                        mSystemUiVisibility |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-                        notifyUiVisibilityChanged();
-                    }
+                    mBarContents.setVisibility(View.GONE);
+                    mShadow.setVisibility(View.VISIBLE);
+                    mSystemUiVisibility |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+                    notifyUiVisibilityChanged();
                     break;
                 case MSG_STOP_TICKER:
                     mTicker.halt();
@@ -1049,11 +1039,6 @@ public class TabletStatusBar extends StatusBar implements
         int old = mDisabled;
         int diff = state ^ old;
         mDisabled = state;
-
-        boolean visible = mStatusBarView.getVisibility() == View.VISIBLE;
-        if ((diff & 0x10000000) != 0) {
-            mStatusBarView.setVisibility(visible ? View.GONE : View.VISIBLE);
-        }
 
         // act accordingly
         if ((diff & StatusBarManager.DISABLE_CLOCK) != 0) {
@@ -1311,20 +1296,18 @@ public class TabletStatusBar extends StatusBar implements
         // We will not show or hide the menu button if the user specifically created it for the
         // NavBar.  If they did not, we will temporarily create one.
         if (showMenu) { // we need to show the menu button
-        	if (mMenuButton == null) {  // User has not put their own menu button on the navbar.
+        	if (mMenuButton == null && mTempMenuButton == null) {  // User has not put their own menu button on the navbar or a temp one exists 
         		mTempMenu = true;
-        		// rather than constantly creating a new view, I'll just create one and keep it
-        		if (mTempMenuButton == null)
-        			mTempMenuButton = generateKey(true, ACTION_MENU,ACTION_NULL,"");
-       			mNavigationArea.removeView(mTempMenuButton); // we remove it first, to clean up.
-        		mNavigationArea.addView(mTempMenuButton);
+        		mTempMenuButton = generateKey(true, ACTION_MENU,ACTION_NULL,"");
+        		mTempMenuButton.setTag("temp_menu_button");
+        		mNavigationArea.addView((View) mTempMenuButton);
         	}
         } else {
         	if (mMenuButton == null) { // only try to remove menu if user doesn't have custom button
         		mTempMenu = false;
         		if (mTempMenuButton != null) { // just a little sanity check.  It better not be null
-        			mNavigationArea.removeView(mTempMenuButton);
-        		// I'm not disposing of the tempview, we'll keep it for next time.
+        			mNavigationArea.removeView(mNavigationArea.findViewWithTag("temp_menu_button"));
+        			mTempMenuButton = null;
         		}
         	}
         }
@@ -2151,6 +2134,9 @@ public class TabletStatusBar extends StatusBar implements
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_BUTTONS_QTY), false,
                     this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_BUTTONS_SHOW), false,
+                    this);
 
             for (int j = 0; j < 5; j++) { // watch all 5 settings for changes.
                 resolver.registerContentObserver(
@@ -2166,9 +2152,6 @@ public class TabletStatusBar extends StatusBar implements
                         Settings.System.getUriFor(Settings.System.NAVIGATION_CUSTOM_APP_ICONS[j]),
                         false,
                         this);
-                resolver.registerContentObserver(
-                		Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_BUTTONS_SHOW), false,
-                		this);
             }
             updateSettings();
         }
@@ -2205,6 +2188,12 @@ public class TabletStatusBar extends StatusBar implements
         	Settings.System.putInt(resolver,
             		Settings.System.NAVIGATION_BAR_BUTTONS_QTY, StockButtonsQty);    	
         }
+        
+        mBackButton = null;
+        mHomeButton = null;
+        mMenuButton = null;
+        mRecentButton = null;
+        mTempMenuButton = null;
 
         for (int j = 0; j < mNumberOfButtons; j++) {
             mClickActions[j] = Settings.System.getString(resolver,
@@ -2229,12 +2218,11 @@ public class TabletStatusBar extends StatusBar implements
                 Settings.System.putString(resolver,
                 		Settings.System.NAVIGATION_CUSTOM_APP_ICONS[j], "");
             }
-            mShowStatusBar = (Settings.System.getInt(resolver,
-                    Settings.System.NAVIGATION_BAR_BUTTONS_SHOW, 1) == 1);
-            mStatusBarView.setVisibility(mShowStatusBar ? View.VISIBLE : View.GONE);
         }
         makeNavBar();
-
+        mShowStatusBar = (Settings.System.getInt(resolver,
+                Settings.System.NAVIGATION_BAR_BUTTONS_SHOW, 1) == 1);
+        mStatusBarView.setVisibility(mShowStatusBar ? View.VISIBLE : View.GONE);
     }
 
     private Drawable getNavbarIconImage(boolean landscape, String uri) {
@@ -2320,8 +2308,7 @@ public class TabletStatusBar extends StatusBar implements
 
         v = new ExtensibleKeyButtonView(mContext, null, ClickAction, Longpress);
         v.setLayoutParams(getLayoutParams(landscape, btnWidth));
-        v.setGlowBackground(landscape ? R.drawable.ic_sysbar_highlight_land
-                : R.drawable.ic_sysbar_highlight);
+        v.setGlowBackground(R.drawable.ic_sysbar_highlight);
 
         // the rest is for setting the icon (or custom icon)
         if (IconUri != null && IconUri.length() > 0) {
@@ -2369,7 +2356,6 @@ public class TabletStatusBar extends StatusBar implements
         pw.println("mNetworkController:");
         mNetworkController.dump(fd, pw, args);
     }
-
 }
 
 
