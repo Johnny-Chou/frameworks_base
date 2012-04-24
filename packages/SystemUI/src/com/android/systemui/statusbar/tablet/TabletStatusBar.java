@@ -1316,6 +1316,7 @@ public class TabletStatusBar extends StatusBar implements
         		// rather than constantly creating a new view, I'll just create one and keep it
         		if (mTempMenuButton == null)
         			mTempMenuButton = generateKey(true, ACTION_MENU,ACTION_NULL,"");
+       			mNavigationArea.removeView(mTempMenuButton); // we remove it first, to clean up.
         		mNavigationArea.addView(mTempMenuButton);
         	}
         } else {
