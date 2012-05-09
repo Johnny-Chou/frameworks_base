@@ -89,7 +89,18 @@ public class RecentTasksLoader {
         // Render the default thumbnail background
         int width = (int) res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_width);
         int height = (int) res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_height);
-        int color = res.getColor(R.drawable.status_bar_recents_app_thumbnail_background);
+        int color;
+
+        if (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.RECENT_APP_SWITCHER,0) == 2) {
+            color = res.getColor(R.drawable.status_bar_recents_app_thumbnail_background_sense4);
+        }
+        else {
+            color = res.getColor(R.drawable.status_bar_recents_app_thumbnail_background);
+        }
+
+        if (DEBUG) Log.v(TAG, "default thumbnail background: width="
+                        + width + ", height=" + height);
 
         boolean largeThumbnail = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LARGE_RECENT_THUMBNAILS, 0) == 1;
