@@ -384,6 +384,7 @@ public class TabletStatusBar extends StatusBar implements
                 R.layout.status_bar_recent_panel_sense4, null);
         }
         else {
+		mRecentsPanel = (RecentsPanelView) View.inflate(context,
 		(mRightButtons ? R.layout.status_bar_recent_panel_flipped :
 		    R.layout.status_bar_recent_panel), null);
         }
@@ -1163,6 +1164,9 @@ public class TabletStatusBar extends StatusBar implements
     }
 
     private void setNavigationVisibility(int visibility) {
+
+        ContentResolver resolver = mContext.getContentResolver();
+
         boolean disableHome = ((visibility & StatusBarManager.DISABLE_HOME) != 0);
         boolean disableRecent = ((visibility & StatusBarManager.DISABLE_RECENT) != 0);
         boolean disableBack = ((visibility & StatusBarManager.DISABLE_BACK) != 0);
