@@ -1165,7 +1165,6 @@ public class TabletStatusBar extends StatusBar implements
 
     private void setNavigationVisibility(int visibility) {
 
-        ContentResolver resolver = mContext.getContentResolver();
 
         boolean disableHome = ((visibility & StatusBarManager.DISABLE_HOME) != 0);
         boolean disableRecent = ((visibility & StatusBarManager.DISABLE_RECENT) != 0);
@@ -2254,7 +2253,7 @@ public class TabletStatusBar extends StatusBar implements
         makeNavBar();
         mShowStatusBar = (Settings.System.getInt(resolver,
                 Settings.System.NAVIGATION_BAR_BUTTONS_SHOW, 1) == 1);
-        mStatusBarView.setVisibility(mShowStatusBar ? View.VISIBLE : View.GONE);
+        mStatusBarContainer.setVisibility(mShowStatusBar ? View.VISIBLE : View.GONE);
     }
 
     private Drawable getNavbarIconImage(boolean landscape, String uri) {
