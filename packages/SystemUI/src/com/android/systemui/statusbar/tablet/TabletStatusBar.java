@@ -1166,6 +1166,7 @@ public class TabletStatusBar extends StatusBar implements
 
     private void setNavigationVisibility(int visibility) {
 
+	ContentResolver resolver = mContext.getContentResolver();
 
         boolean disableHome = ((visibility & StatusBarManager.DISABLE_HOME) != 0);
         boolean disableRecent = ((visibility & StatusBarManager.DISABLE_RECENT) != 0);
