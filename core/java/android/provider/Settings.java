@@ -3083,6 +3083,11 @@ public final class Settings {
          */
         public static final String SCREENSHOTS_JPEG = "screenshots_jpg";
 
+         /**
+         * Ability to set backlight timeout for capacitive buttons, default value is 1600ms (1.6 seconds)
+         * @hide
+         */
+        public static final String KEY_BACKLIGHT_TIMEOUT = "key_backlight_timeout";
 
 /**
  ** TABLET TWEAKS !!!
