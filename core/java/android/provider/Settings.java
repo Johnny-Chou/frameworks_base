@@ -3104,7 +3104,27 @@ public final class Settings {
          * Ability to set backlight timeout for capacitive buttons, default value is 1600ms (1.6 seconds)
          * @hide
          */
-        public static final String KEY_BACKLIGHT_TIMEOUT = "key_backlight_timeout";
+        public static final String BACKLIGHT_TIMEOUT = "key_backlight_timeout";
+
+         /**
+         * Set GPU overclocking values.
+         * @hide
+         */
+        public static final String GPU_OVERCLOCK = "gpu_overclock";
+
+         /**
+         * Set LiveOC overclocking values.
+         * @hide
+         */
+        public static final String LIVEOC = "liveoc";
+
+         /**
+         * Set Wifi Power Management values.
+         * @hide
+         */
+        public static final String WIFI_PM = "wifi_pm";
+
+
 
 /**
  ** TABLET TWEAKS !!!
