@@ -3041,34 +3041,10 @@ public final class Settings {
  **/
 
         /**
-         * Whether to hide the soft home.  The value is boolean (1 or 0).
+         * Disables the hardware capacitive buttons.  The value is boolean (1 or 0).
          * @hide
          */
-        public static final String HIDE_SOFT_HOME_BUTTON = "hide_soft_home_button";
-
-        /**
-         * Whether to hide the soft recent button.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String HIDE_SOFT_RECENT_BUTTON = "hide_soft_recent_button";
-
-        /**
-         * Whether to hide the soft back button.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String HIDE_SOFT_BACK_BUTTON = "hide_soft_back_button";
-
-         /**
-         * Whether to force the soft menu button to show.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String FORCE_SOFT_MENU_BUTTON = "force_soft_menu_button";
-
-        /**
-         * Whether to hide the soft menu button.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String HIDE_SOFT_MENU_BUTTON = "hide_soft_menu_button";
+        public static final String DISABLE_HARDWARE_BUTTONS = "disable_hardware_buttons";
 
         /**
          * Whether to show larger thumbnails in recent items.  The value is boolean (1 or 0).

@@ -709,7 +709,9 @@ status_t CameraService::Client::startRecordingMode() {
 
     // start recording mode
     enableMsgType(CAMERA_MSG_VIDEO_FRAME);
-    mCameraService->playSound(SOUND_RECORDING);
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) mCameraService->playSound(SOUND_RECORDING);
     result = mHardware->startRecording();
     if (result != NO_ERROR) {
         LOGE("mHardware->startRecording() failed with status %d", result);
@@ -737,7 +739,9 @@ void CameraService::Client::stopRecording() {
     Mutex::Autolock lock(mLock);
     if (checkPidAndHardware() != NO_ERROR) return;
 
-    mCameraService->playSound(SOUND_RECORDING);
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) mCameraService->playSound(SOUND_RECORDING);
     disableMsgType(CAMERA_MSG_VIDEO_FRAME);
     mHardware->stopRecording();
 
@@ -912,7 +916,9 @@ status_t CameraService::Client::sendCommand(int32_t cmd, int32_t arg1, int32_t a
         }
         return OK;
     } else if (cmd == CAMERA_CMD_PLAY_RECORDING_SOUND) {
-        mCameraService->playSound(SOUND_RECORDING);
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) mCameraService->playSound(SOUND_RECORDING);
     }
     else if (cmd == CAMERA_CMD_HISTOGRAM_ON ) {
         enableMsgType(CAMERA_MSG_STATS_DATA);
@@ -1013,7 +1019,11 @@ void CameraService::Client::notifyCallback(int32_t msgType, int32_t ext1,
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) return;
-    if (!client->lockIfMessageWanted(msgType)) return;
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) {
+        if (!client->lockIfMessageWanted(msgType)) return;
+    }
 
     switch (msgType) {
         case CAMERA_MSG_SHUTTER:
@@ -1032,8 +1042,11 @@ void CameraService::Client::dataCallback(int32_t msgType,
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) return;
-    if (!client->lockIfMessageWanted(msgType)) return;
-
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) {
+        if (!client->lockIfMessageWanted(msgType)) return;
+    }
     if (dataPtr == 0 && metadata == NULL) {
         LOGE("Null data returned in data callback");
         client->handleGenericNotify(CAMERA_MSG_ERROR, CAMERA_ERROR_UNKNOWN, 0);
@@ -1065,7 +1078,11 @@ void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) return;
-    if (!client->lockIfMessageWanted(msgType)) return;
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.product", value, "0");
+    if (strcmp(value, "GT-P1000") != 0) {
+        if (!client->lockIfMessageWanted(msgType)) return;
+    }
 
     if (dataPtr == 0) {
         LOGE("Null data returned in data with timestamp callback");
@@ -1086,7 +1103,11 @@ void CameraService::Client::handleShutter(void) {
     if (c != 0) {
         mLock.unlock();
         c->notifyCallback(CAMERA_MSG_SHUTTER, 0, 0);
-        if (!lockIfMessageWanted(CAMERA_MSG_SHUTTER)) return;
+        char value[PROPERTY_VALUE_MAX];
+        property_get("ro.build.product", value, "0");
+        if (strcmp(value, "GT-P1000") != 0) {
+            if (!lockIfMessageWanted(CAMERA_MSG_SHUTTER)) return;
+        }
     }
     disableMsgType(CAMERA_MSG_SHUTTER);
 
