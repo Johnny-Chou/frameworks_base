@@ -3044,7 +3044,7 @@ public final class Settings {
          * Disables the hardware capacitive buttons.  The value is boolean (1 or 0).
          * @hide
          */
-        public static final String DISABLE_HARDWARE_BUTTONS = "disable_hardware_buttons";
+        public static final String ENABLE_HARDWARE_BUTTONS = "enable_hardware_buttons";
 
         /**
          * Whether to show larger thumbnails in recent items.  The value is boolean (1 or 0).
@@ -3080,7 +3080,7 @@ public final class Settings {
          * Ability to set backlight timeout for capacitive buttons, default value is 1600ms (1.6 seconds)
          * @hide
          */
-        public static final String BACKLIGHT_TIMEOUT = "key_backlight_timeout";
+        public static final String BACKLIGHT_TIMEOUT = "backlight_timeout";
 
          /**
          * Set GPU overclocking values.
