@@ -3140,6 +3140,11 @@ public final class Settings {
          */
         public static final String WIFI_PM = "wifi_pm";
 
+         /**
+         * Adjust the Touchscreen clock values
+         * @hide
+         */
+        public static final String TOUCHSCREEN_CLOCK = "touchscreen_clock";
 
 
 /**
