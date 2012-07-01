@@ -3146,6 +3146,11 @@ public final class Settings {
          */
         public static final String TOUCHSCREEN_CLOCK = "touchscreen_clock";
 
+         /**
+         * Enable / disable the Screenshot tone.
+         * @hide
+         */
+        public static final String SCREENSHOT_SOUND = "screenshot_sound";
 
 /**
  ** TABLET TWEAKS !!!

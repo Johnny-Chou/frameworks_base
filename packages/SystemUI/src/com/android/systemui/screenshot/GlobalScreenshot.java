@@ -29,6 +29,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -38,6 +39,7 @@ import android.hardware.CameraSound;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -264,7 +266,8 @@ class GlobalScreenshot {
     private float mBgPaddingScale;
 
     private CameraSound mCameraSound;
-
+    private boolean mScreenshotSound;
+    private SettingsObserver mSettingsObserver;
 
     /**
      * @param context everything needs a context :(
@@ -317,6 +320,8 @@ class GlobalScreenshot {
 
         // Setup the Camera shutter sound
         mCameraSound = new CameraSound();
+        mSettingsObserver = new SettingsObserver();
+        updateSoundSetting();
     }
 
     /**
@@ -432,7 +437,7 @@ class GlobalScreenshot {
             @Override
             public void run() {
                 // Play the shutter sound to notify that we've taken a screenshot
-                mCameraSound.playSound(CameraSound.SHUTTER_CLICK);
+                if (mScreenshotSound) mCameraSound.playSound(CameraSound.SHUTTER_CLICK);
 
                 mScreenshotView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 mScreenshotView.buildLayer();
@@ -501,6 +506,26 @@ class GlobalScreenshot {
         });
         return anim;
     }
+
+    private void updateSoundSetting() {
+        mScreenshotSound = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREENSHOT_SOUND, 1) == 1;
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver() {
+            super(new Handler());
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                Settings.System.SCREENSHOT_SOUND), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            updateSoundSetting();
+        }
+    }
+
     private ValueAnimator createScreenshotDropOutAnimation(int w, int h, boolean statusBarVisible,
             boolean navBarVisible) {
         ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
