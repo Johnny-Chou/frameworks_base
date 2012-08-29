@@ -110,7 +110,7 @@
                     systemui:glowBackground="@drawable/ic_sysbar_highlight"
                     android:visibility="gone"
                     />
-            </LinearLayout>
+           </LinearLayout>
 
             <!-- fake space bar zone -->
             <com.android.systemui.statusbar.policy.EventHole android:id="@+id/fake_space_bar"
