@@ -241,13 +241,13 @@ public class HoloClock extends FrameLayout {
                 }
             }
 
-//            format = format.replaceAll("a", "").trim();
             mClockFormat = sdf = new SimpleDateFormat(format);
             mClockFormatString = format;
         } else {
             sdf = mClockFormat;
         }
         String result = sdf.format(mCalendar.getTime());
+	result = result.replaceAll("\\s","");
 
         if (mAmPmStyle != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
@@ -268,7 +268,6 @@ public class HoloClock extends FrameLayout {
                 return formatted;
             }
         }
-
         return result;
     }
     
@@ -302,11 +301,7 @@ public class HoloClock extends FrameLayout {
                 Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, AM_PM_STYLE_GONE));
 
         mClockFormatString = "";
-/*
-        if (mAttached) {
-            updateClock();
-        }
-*/
+
         int defaultColor = getResources().getColor(
                 com.android.internal.R.color.holo_blue_light);
 
