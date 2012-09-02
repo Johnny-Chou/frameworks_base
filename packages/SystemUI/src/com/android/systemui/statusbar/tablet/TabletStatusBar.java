@@ -561,6 +561,7 @@ public class TabletStatusBar extends StatusBar implements
                     mNotificationPanelParams);
             mRecentsPanel.updateValuesFromResources();
         }
+        makeNavBar();
     }
 
     protected void loadDimens() {
@@ -1345,15 +1346,11 @@ public class TabletStatusBar extends StatusBar implements
     	// we are using mTempMenu to put a temporary menu button on the NavBar when needed and the user
     	// hasn't already placed a menu button in their custom choices.
         if (mTempMenu) {  // if mTempMenu is true, then mTempMenuButton had better not be null!
-	        Slog.v(TAG, "NAVBAR/MENU :: mTempMenu exists");
         	if (mTempMenuButton.getVisibility() == View.VISIBLE) {
-		        Slog.v(TAG, "NAVBAR/MENU :: mTempMenu is visible");
 	            	on = true;
 		} else {
-		        Slog.v(TAG, "NAVBAR/MENU :: mTempMenu is invisible?!");
 		}
 	} else {
-	        Slog.v(TAG, "NAVBAR/MENU :: mTempMenu does not exist");
 	}
         Slog.v(TAG, "setLightsOn(" + on + ")");
         if (on) {
@@ -1368,21 +1365,16 @@ public class TabletStatusBar extends StatusBar implements
         // We will not show or hide the menu button if the user specifically created it for the
         // NavBar.  If they did not, we will temporarily create one.
         if (showMenu) { // we need to show the menu button
-		Slog.v(TAG, "NAVBAR/MENU :: MENU button does not exist");
         	if (mMenuButton == null && mTempMenuButton == null) {  // User has not put their own menu button on the navbar or a temp one exists
-			Slog.v(TAG, "NAVBAR/MENU :: creating the MENU button");
         		mTempMenu = true;
         		mTempMenuButton = generateKey(true, ACTION_MENU,ACTION_NULL,"");
         		mTempMenuButton.setTag("temp_menu_button");
         		mNavigationArea.addView((View) mTempMenuButton);
         	}
         } else {
-		Slog.v(TAG, "NAVBAR/MENU :: MENU button already exists");
         	if (mMenuButton == null) { // only try to remove menu if user doesn't have custom button
-			Slog.v(TAG, "NAVBAR/MENU :: removing temporary MENU button");
         		mTempMenu = false;
         		if (mTempMenuButton != null) { // just a little sanity check.  It better not be null
-				Slog.v(TAG, "NAVBAR/MENU :: mTempMenuButton != null");
         			mNavigationArea.removeView(mNavigationArea.findViewWithTag("temp_menu_button"));
         			mTempMenuButton = null;
         		}
@@ -2343,7 +2335,6 @@ public class TabletStatusBar extends StatusBar implements
 		Slog.v(TAG, "NAVBAR: where am i? :(");
 		getOrient = (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_UNDEFINED);
 	}
-//	landscape = (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     	if (mNavigationArea != null) {
     		mNavigationArea.removeAllViews();
     	}
