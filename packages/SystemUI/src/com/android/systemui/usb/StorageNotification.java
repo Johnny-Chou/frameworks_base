@@ -109,13 +109,7 @@ public class StorageNotification extends StorageEventListener {
              */
             connected = false;
         }
-
-        boolean autoMount = (Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.MOUNT_UMS_AUTOSTART, 0) == 1);
-        if (autoMount && connected) {
-            mStorageManager.enableUsbMassStorage();
-        }
-        else updateUsbMassStorageNotification(connected);
+	updateUsbMassStorageNotification(connected);
     }
 
     /*

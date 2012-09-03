@@ -296,32 +296,28 @@ public class StatusBarIconView extends AnimatedImageView {
     }
     
     class SettingsObserver extends ContentObserver {
-        ContentResolver resolver;
         SettingsObserver(Handler handler) {
             super(handler);
-            resolver = mContext.getContentResolver();
         }
         void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUS_BAR_ICON_TRANSPARENCY), false,
-                    this);
-            setAlpha(Settings.System.getFloat(mContext
-                    .getContentResolver(), Settings.System.STATUS_BAR_ICON_TRANSPARENCY,
-                    0.55f));
-            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_ICON_TRANSPARENCY), 
+		    false, this);
+            resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_NOTIF_COUNT),
                     false, this);
         }
 
         @Override
         public void onChange(boolean selfChange) {
-            setAlpha(Settings.System.getFloat(mContext
-                    .getContentResolver(), Settings.System.STATUS_BAR_ICON_TRANSPARENCY,
-                    0.55f));
-            mShowNotificationCount = Settings.System.getInt(
-                    mContext.getContentResolver(),
-                    Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
-            set(mIcon, true);
+		setAlpha(Settings.System.getFloat(mContext.getContentResolver(), 
+			Settings.System.STATUS_BAR_ICON_TRANSPARENCY,
+			0.9f));
+		mShowNotificationCount = Settings.System.getInt(
+			mContext.getContentResolver(),
+			Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
+		set(mIcon, true);
         }
 
         void unobserve() {
