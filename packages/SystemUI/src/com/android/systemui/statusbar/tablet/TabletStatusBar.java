@@ -486,7 +486,7 @@ public class TabletStatusBar extends StatusBar implements
         final Display d = WindowManagerImpl.getDefault().getDefaultDisplay();
         final Point size = new Point();
         d.getRealSize(size);
-        return Math.max(res.getDimensionPixelSize(R.dimen.notification_panel_min_height), size.y);
+        return size.y;
     }
 
     @Override
@@ -2299,7 +2299,7 @@ public class TabletStatusBar extends StatusBar implements
                 return mContext.getResources().getDrawable(R.drawable.ic_sysbar_search);
             } else if (uri.equals(ACTION_MENU)) {
 
-                return mContext.getResources().getDrawable(R.drawable.ic_sysbar_menu_big);
+                return mContext.getResources().getDrawable(R.drawable.ic_sysbar_menu);
             } else if (uri.equals(ACTION_KILL)) {
 
                 return mContext.getResources().getDrawable(R.drawable.ic_sysbar_killtask);

@@ -15,6 +15,13 @@
  * limitations under the License.
 -->
 
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:visibility="gone"
+    android:id="@+id/scroll_settings" >
 <com.android.systemui.statusbar.tablet.SettingsView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
@@ -90,4 +97,4 @@
     <View style="@style/StatusBarPanelSettingsPanelSeparator" />
 
 </com.android.systemui.statusbar.tablet.SettingsView>
-
+</ScrollView>

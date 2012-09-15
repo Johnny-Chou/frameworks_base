@@ -185,6 +185,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
             holder.labelView.setText(td.getLabel());
             holder.thumbnailView.setContentDescription(td.getLabel());
             updateThumbnail(holder, td.getThumbnail(), true, false);
+	    updateValuesFromResources();
 
             holder.thumbnailView.setTag(td);
             holder.thumbnailView.setOnLongClickListener(new OnLongClickDelegate(convertView));
@@ -375,21 +376,20 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
         else if (recent_style == 2) {
         	mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy_sense4);
         	mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width_sense4));
-		final boolean isScreenLarge = res.getConfiguration().smallestScreenWidthDp >= 600;
-	        mLargeThumbnail = (Settings.System.getInt(mContext.getContentResolver(),
-	                    Settings.System.LARGE_RECENT_THUMBNAILS, 0) == 1) && isScreenLarge;
         }
         else {
 		mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy);
 		mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width));
 	        mRightButtons = (Settings.System.getInt(mContext.getContentResolver(),
-                	Settings.System.RIGHT_SOFT_BUTTONS, 0) == 1);
-		final boolean isScreenLarge = res.getConfiguration().smallestScreenWidthDp >= 600;
-	        mLargeThumbnail = (Settings.System.getInt(mContext.getContentResolver(),
-	                    Settings.System.LARGE_RECENT_THUMBNAILS, 0) == 1) && isScreenLarge;
+			Settings.System.RIGHT_SOFT_BUTTONS, 0) == 1);
         }
+	final boolean isScreenLarge = res.getConfiguration().smallestScreenWidthDp >= 600;
+        mLargeThumbnail = (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LARGE_RECENT_THUMBNAILS, 0) == 1) && isScreenLarge;
 
         if (DEBUG) Log.d(TAG, "mFitThumbnailToXY: " + mFitThumbnailToXY);
+        if (DEBUG) Log.d(TAG, "isScreenLarge: " + isScreenLarge);
+        if (DEBUG) Log.d(TAG, "mLargeThumbnail: " + mLargeThumbnail);
         if (DEBUG) Log.d(TAG, "mThumbnailWidth: " + mThumbnailWidth);
     }
 
@@ -473,6 +473,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
                 int width = thumbnail.getWidth();
                 int height = thumbnail.getHeight();
 
+
                 Matrix matrix = new Matrix();
                 matrix.preScale(1, -1);
 
@@ -511,12 +512,12 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
                 h.thumbnailViewImageBitmap.getHeight() != thumbnail.getHeight()) {
                 if (mFitThumbnailToXY) {
                     h.thumbnailViewImage.setScaleType(ScaleType.FIT_XY);
-                    if(Settings.System.getInt(mContext.getContentResolver(),
+                    if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.RECENT_APP_SWITCHER,0) == 2) {
                         h.thumbnailViewImage.setRotationY(25.0f);
                     }
                 } else {
-                    if(Settings.System.getInt(mContext.getContentResolver(),
+                    if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.RECENT_APP_SWITCHER,0) == 2) {
                         h.thumbnailViewImage.setScaleType(ScaleType.FIT_CENTER);
                         h.thumbnailViewImage.setRotationY(25.0f);

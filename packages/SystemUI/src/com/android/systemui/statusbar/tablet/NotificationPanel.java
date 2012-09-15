@@ -22,20 +22,26 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Slog;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.Prefs;
@@ -113,6 +119,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         setToggleVisibility();
 
         setContentFrameVisible(mNotificationCount > 0, false);
+        setNotificationScrollerHeight();
     }
 
     private View.OnClickListener mClearButtonListener = new View.OnClickListener() {
@@ -223,7 +230,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
     };
 
     public void setNotificationCount(int n) {
-        // Slog.d(TAG, "notificationCount=" + n);
+//      Slog.e(TAG, "NOTIFICATION/PANEL :: @ setNotificationCount = " + n );
         if (!mShowing) {
             // just do it, already
             setContentFrameVisible(n > 0, false);
@@ -233,6 +240,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
                 setContentFrameVisible(n > 0, true);
             }
         }
+	setNotificationScrollerHeight();
         mNotificationCount = n;
     }
 
@@ -249,6 +257,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         LayoutParams lp = (LayoutParams) mContentFrame.getLayoutParams();
         lp.bottomMargin = (!togglesVisible ? pixels : 0);
         mContentFrame.setLayoutParams(lp);
+	setNotificationScrollerHeight();
     }
 
     private void adjustQuickToggles(boolean showing) {
@@ -387,8 +396,42 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
     void addSettingsView() {
         LayoutInflater infl = LayoutInflater.from(getContext());
         mSettingsView = infl.inflate(R.layout.status_bar_settings_view, mContentFrame, false);
+
+        // set height
+        mSettingsView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int currentHeight = mSettingsView.getMeasuredHeight();
+        WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        int maxHeight = d.getHeight() - mTitleArea.getHeight() - (togglesVisible ? mQuickToggles.getHeight() : 0);
+        if (currentHeight > maxHeight) {
+            currentHeight = maxHeight;
+        }
+        mSettingsView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, currentHeight));
+
         mSettingsView.setVisibility(View.GONE);
         mContentFrame.addView(mSettingsView);
+    }
+
+    public void setNotificationScrollerHeight() {
+        mNotificationScroller.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int currentHeight = mNotificationScroller.getMeasuredHeight();
+        WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        int maxHeight = d.getHeight() - mTitleArea.getHeight() - (togglesVisible ? mQuickToggles.getHeight() : 0);
+        mNotificationScroller.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, currentHeight > maxHeight ? maxHeight :
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        mContentFrame.removeView(mNotificationScroller);
+        mContentFrame.addView(mNotificationScroller);
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        if (mSettingsView != null) {
+            mContentFrame.removeView(mSettingsView);
+            addSettingsView();
+            mSettingsView.setVisibility(View.VISIBLE);
+        }
     }
 
     private class Choreographer implements Animator.AnimatorListener {

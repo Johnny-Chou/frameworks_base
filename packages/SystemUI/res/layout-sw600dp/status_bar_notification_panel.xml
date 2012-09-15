@@ -54,7 +54,7 @@
 			android:layout_alignParentBottom="true">
 			<ScrollView
 				android:id="@+id/notification_scroller"
-				android:layout_height="wrap_content"
+				android:layout_height="match_parent"
 				android:layout_width="match_parent"
 				android:layout_weight="1">
 				<com.android.systemui.statusbar.policy.NotificationRowLayout
