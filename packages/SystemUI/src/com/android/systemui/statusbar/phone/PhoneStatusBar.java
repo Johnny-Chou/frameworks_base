@@ -1110,6 +1110,15 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
     }
 
+    boolean mVisible = true;
+
+    public void toggleVisibility() {
+        final WindowManager wm = WindowManagerImpl.getDefault();
+        if (mVisible) wm.removeView(mNavigationBarView);
+        else addNavigationBar();
+        mVisible = !mVisible;
+    }
+
     /**
      * State is one or more of the DISABLE constants from StatusBarManager.
      */

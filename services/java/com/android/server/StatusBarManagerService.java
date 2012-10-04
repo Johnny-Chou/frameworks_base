@@ -147,6 +147,15 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         }
     }
 
+    public void toggleVisibility() {
+        if (mBar != null) {
+            try {
+                mBar.toggleVisibility();
+            } catch (RemoteException ex) {
+            }
+        }
+    }
+
     private void disableLocked(int what, IBinder token, String pkg) {
         // It's important that the the callback and the call to mBar get done
         // in the same order when multiple threads are calling this function
