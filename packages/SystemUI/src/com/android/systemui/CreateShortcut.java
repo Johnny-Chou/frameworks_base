@@ -54,10 +54,23 @@ public class CreateShortcut extends LauncherActivity {
   private int getProperShortcutIcon(String className) {
     String c = className.substring(className.lastIndexOf(".") + 1);
 
-    if (c.equals("Torch"))
+    if (c.equals("Torch")) {
       return R.drawable.toggle_torch;
-    else
-      return R.drawable.toggle_navbar;
+    } else if (c.equals ("NavbarToggle")) {
+        return R.drawable.toggle_navbar;
+    } else if (c.equals ("WidgetToggle")) {
+        return R.drawable.ic_sysbar_widget;
+    } else if (c.equals ("RingVibToggle")) {
+        return R.drawable.ic_lockscreen_vib;
+    } else if (c.equals ("RingSilentToggle")) {
+        return R.drawable.ic_lockscreen_silent;
+    } else if (c.equals ("RingVibSilentToggle")) {
+        return R.drawable.ic_lockscreen_soundon;
+    } else if (c.equals ("GoToHomeScreen")) {
+        return R.drawable.ic_lockscreen_home;
+    } else {
+      return R.drawable.ic_sysbar_null;
+    }
   }
 
   @Override
