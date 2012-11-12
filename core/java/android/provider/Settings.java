@@ -3458,6 +3458,12 @@ public final class Settings {
          */
         public static final String GPU_OVERCLOCK = "gpu_overclock";
 
+        /**
+         * set Touchscreen clock speed
+         *
+         * @hide
+         */
+        public static final String TOUCHSCREEN_CLOCK = "touchscreen_clock";
     }
 
     /**
