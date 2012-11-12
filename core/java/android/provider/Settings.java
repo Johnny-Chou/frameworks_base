@@ -3448,6 +3448,16 @@ public final class Settings {
          * @hide
          */
         public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
+
+	/** * AOKP SGT7 ADDIIONS * **/
+
+        /**
+         * set GPU clock speed
+         *
+         * @hide
+         */
+        public static final String GPU_OVERCLOCK = "gpu_overclock";
+
     }
 
     /**
