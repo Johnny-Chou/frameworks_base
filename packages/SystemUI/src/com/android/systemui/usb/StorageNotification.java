@@ -17,10 +17,13 @@
 package com.android.systemui.usb;
 
 import android.app.Notification;
+import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.os.Handler;
@@ -34,6 +37,7 @@ public class StorageNotification extends StorageEventListener {
     private static final String TAG = "StorageNotification";
 
     private static final boolean POP_UMS_ACTIVITY_ON_CONNECT = true;
+    private static final String UMS_INTENT = "com.android.systemui.usb.ums";
 
     /**
      * Binder context for this service
@@ -64,6 +68,26 @@ public class StorageNotification extends StorageEventListener {
 
     private Handler        mAsyncEventHandler;
 
+    /** Used to detect when the notification is pressed to start/stop UMS */
+    private BroadcastReceiver mUmsStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(UMS_INTENT)) {
+                // things to do elsewhere
+                mAsyncEventHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mStorageManager.isUsbMassStorageEnabled()) {
+                            mStorageManager.disableUsbMassStorage();
+                        } else if (mUmsAvailable) {
+                            mStorageManager.enableUsbMassStorage();
+                        }
+                    }
+                });
+            }
+        }
+    };
+
     public StorageNotification(Context context) {
         mContext = context;
 
@@ -77,6 +101,8 @@ public class StorageNotification extends StorageEventListener {
         mAsyncEventHandler = new Handler(thr.getLooper());
 
         onUsbMassStorageConnectionChanged(connected);
+
+        context.registerReceiver(mUmsStateReceiver, new IntentFilter(UMS_INTENT));
     }
 
     /*
@@ -295,6 +321,7 @@ public class StorageNotification extends StorageEventListener {
             CharSequence title = r.getText(titleId);
             CharSequence message = r.getText(messageId);
 
+/*
             if (mUsbStorageNotification == null) {
                 mUsbStorageNotification = new Notification();
                 mUsbStorageNotification.icon = icon;
@@ -311,10 +338,15 @@ public class StorageNotification extends StorageEventListener {
 
             mUsbStorageNotification.tickerText = title;
             if (pi == null) {
+*/
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.UMS_NOTIFICATION_CONNECT, 0) == 1) {
+                pi = PendingIntent.getBroadcast(mContext, 0, new Intent(UMS_INTENT), 0);
+            } else if (pi == null) {
                 Intent intent = new Intent();
                 pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);
             }
-
+/*
             mUsbStorageNotification.setLatestEventInfo(mContext, title, message, pi);
             final boolean adbOn = 1 == Settings.Secure.getInt(
                 mContext.getContentResolver(),
@@ -333,9 +365,20 @@ public class StorageNotification extends StorageEventListener {
                 // builds or use adb commands.
                 mUsbStorageNotification.fullScreenIntent = pi;
             }
+*/
+            Notification.Builder mBuilder = new Notification.Builder(mContext)
+                .setSmallIcon(icon)
+                .setWhen(0)
+                .setOngoing(true)
+                .setTicker(title)
+                .setContentIntent(pi)
+                .setContentTitle(title)
+                .setContentText(message);
+            mUsbStorageNotification = mBuilder.build();
         }
     
-        final int notificationId = mUsbStorageNotification.icon;
+//        final int notificationId = mUsbStorageNotification.icon;
+        final int notificationId = com.android.internal.R.drawable.stat_sys_data_usb;
         if (visible) {
             notificationManager.notify(notificationId, mUsbStorageNotification);
         } else {

@@ -3464,6 +3464,14 @@ public final class Settings {
          * @hide
          */
         public static final String TOUCHSCREEN_CLOCK = "touchscreen_clock";
+
+        /**
+         * click UMS notification to stop/start USB mass storage (skips information screen)
+         *
+         * @hide
+         */
+        public static final String UMS_NOTIFICATION_CONNECT = "ums_notification_connect";
+
     }
 
     /**
