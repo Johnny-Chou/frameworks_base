@@ -3472,6 +3472,14 @@ public final class Settings {
          */
         public static final String UMS_NOTIFICATION_CONNECT = "ums_notification_connect";
 
+        /**
+         * add optional phone statusbar volume control - allows setting the volume from the notifications area
+         *
+         * @hide
+         */
+        public static final String PHONE_STATUS_BAR_VOLUME = "phone_status_bar_volume";
+
+
     }
 
     /**

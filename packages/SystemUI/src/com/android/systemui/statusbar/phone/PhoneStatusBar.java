@@ -110,6 +110,8 @@ import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
+import com.android.systemui.statusbar.policy.ToggleSlider;
+import com.android.systemui.statusbar.policy.VolumeController;
 import com.android.systemui.statusbar.policy.WeatherPanel;
 import com.android.systemui.statusbar.toggles.TogglesView;
 
@@ -281,6 +283,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     int mFlingY;
     int[] mAbsPos = new int[2];
     Runnable mPostCollapseCleanup = null;
+
+    VolumeController mVolume;
 
     // last theme that was applied in order to detect theme change (as opposed
     // to some other configuration change).
@@ -643,8 +647,17 @@ public class PhoneStatusBar extends BaseStatusBar {
                 Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE), false,
                 mBrightNessContentObs);
         updatePropFactorValue();
-
+	refreshStatusBarVolume();
         return mStatusBarView;
+    }
+
+    private void refreshStatusBarVolume() {
+        boolean show = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PHONE_STATUS_BAR_VOLUME, 0) == 1;
+        View volumeLayout = mStatusBarWindow.findViewById(R.id.volume_layout);
+        volumeLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        ToggleSlider volume = (ToggleSlider) mStatusBarWindow.findViewById(R.id.volume);
+        if (mVolume == null && show) mVolume = new VolumeController(mContext, volume);
     }
 
     @Override
@@ -2959,11 +2972,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.WEATHER_PANEL_SHORTCLICK), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.WEATHER_PANEL_LONGCLICK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PHONE_STATUS_BAR_VOLUME), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange) {
             updateSettings();
+	    refreshStatusBarVolume();
         }
     }
 
