@@ -3479,6 +3479,27 @@ public final class Settings {
          */
         public static final String PHONE_STATUS_BAR_VOLUME = "phone_status_bar_volume";
 
+        /**
+         * change the statusbar colour (incluing the opacity)
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_COLOR = "status_bar_color";
+
+        /**
+         * change the notification panel colour (incluing the opacity)
+         *
+         * @hide
+         */
+        public static final String NOTIFICATION_PANEL_COLOR = "notification_panel_color";
+
+        /**
+         * change the navigation bar colour (incluing the opacity)
+         *
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_COLOR = "navigation_bar_color";
+
 
     }
 

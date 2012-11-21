@@ -64,6 +64,14 @@ public interface WindowManager extends ViewManager {
      * @param view The view to be removed.
      */
     public void removeViewImmediate(View view);
+
+    /**
+     * Checks if given view is attached
+     *
+     * @param view The view to be checked.
+     */
+    public boolean hasView(View view);
+
     
     /**
      * Return true if this window manager is configured to request hardware

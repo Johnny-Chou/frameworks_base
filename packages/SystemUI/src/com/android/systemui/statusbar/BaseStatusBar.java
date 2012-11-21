@@ -23,6 +23,7 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.res.Configuration;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -88,6 +89,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_CLOSE_SEARCH_PANEL = 1025;
     protected static final int MSG_SHOW_INTRUDER = 1026;
     protected static final int MSG_HIDE_INTRUDER = 1027;
+    protected static final int MSG_RECREATE = 1028;
     private boolean mTabletui;
     private boolean mLefty;
 
@@ -209,6 +211,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mWindowManager = IWindowManager.Stub.asInterface(
                 ServiceManager.getService(Context.WINDOW_SERVICE));
+
+        SettingsObserver observer = new SettingsObserver(mHandler, mWindowManager);
+        observer.observe(mContext);
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
@@ -522,6 +527,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                  if (mSearchPanelView != null && mSearchPanelView.isShowing()) {
                      mSearchPanelView.show(false, true);
                  }
+                 break;
+             case MSG_RECREATE:
+                 mCommandQueue.toggleVisibility();
                  break;
             }
         }
@@ -1000,4 +1008,45 @@ public abstract class BaseStatusBar extends SystemUI implements
     public boolean isTablet() {
         return false;
     }
+
+    private static class SettingsObserver extends ContentObserver {
+        private Handler mHandler;
+        private ContentResolver mResolver;
+        private IWindowManager mWm;
+
+        SettingsObserver(Handler handler, IWindowManager wm) {
+            super(handler);
+            mHandler = handler;
+            mWm = wm;
+        }
+
+        void observe(Context context) {
+            mResolver = context.getContentResolver();
+            mResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_COLOR), false, this);
+            mResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_PANEL_COLOR), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            boolean hasNavBar = false;
+            try {
+                hasNavBar = mWm.hasNavigationBar();
+            } catch (Exception e) {
+            }
+
+            if (uri.equals(Settings.System.getUriFor(Settings.System.TABLET_UI))) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_SHOW))
+                    && hasNavBar) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            } else {
+                mHandler.removeMessages(MSG_RECREATE);
+                mHandler.sendEmptyMessage(MSG_RECREATE);
+                mHandler.sendEmptyMessageDelayed(MSG_RECREATE, 500);
+            }
+        }
+    }
+
 }
