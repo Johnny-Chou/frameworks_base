@@ -144,6 +144,55 @@
 
     <protected-broadcast android:name="android.intent.action.DREAMING_STARTED" />
     <protected-broadcast android:name="android.intent.action.DREAMING_STOPPED" />
+    <protected-broadcast android:name="android.intent.action.ANY_DATA_STATE" />
+
+    <protected-broadcast android:name="com.android.server.WifiManager.action.START_SCAN" />
+    <protected-broadcast android:name="com.android.server.WifiManager.action.DELAYED_DRIVER_STOP" />
+    <protected-broadcast android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.SCAN_RESULTS" />
+    <protected-broadcast android:name="android.net.wifi.RSSI_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.LINK_CONFIGURATION_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.CONFIGURED_NETWORKS_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.supplicant.STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.DISCOVERY_STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.PEERS_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.PERSISTENT_GROUPS_CHANGED" />
+    <protected-broadcast android:name="android.net.conn.TETHER_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.conn.INET_CONDITION_ACTION" />
+
+
+
+
+    <protected-broadcast android:name="android.intent.action.ANY_DATA_STATE" />
+
+    <protected-broadcast android:name="com.android.server.WifiManager.action.START_SCAN" />
+    <protected-broadcast android:name="com.android.server.WifiManager.action.DELAYED_DRIVER_STOP" />
+    <protected-broadcast android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.SCAN_RESULTS" />
+    <protected-broadcast android:name="android.net.wifi.RSSI_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.LINK_CONFIGURATION_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.CONFIGURED_NETWORKS_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.supplicant.STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.DISCOVERY_STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.PEERS_CHANGED" />
+    <protected-broadcast android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE" />
+    <protected-broadcast android:name="android.net.wifi.p2p.PERSISTENT_GROUPS_CHANGED" />
+    <protected-broadcast android:name="android.net.conn.TETHER_STATE_CHANGED" />
+    <protected-broadcast android:name="android.net.conn.INET_CONDITION_ACTION" />
+
+
+
 
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
@@ -1496,6 +1545,13 @@
         android:protectionLevel="signature|system"
         android:label="@string/permlab_anyCodecForPlayback"
         android:description="@string/permdesc_anyCodecForPlayback" />
+
+<!-- Allows an application to access Superuser binary.
+        This is a hack to avoid Android Issue #25906 -->
+    <permission android:name="android.permission.ACCESS_SUPERUSER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_accessSuperuser"
+        android:description="@string/permdesc_accessSuperuser" />
 
     <!-- ========================================= -->
     <!-- Permissions for special development tools -->
