@@ -215,6 +215,8 @@ public class TabletStatusBar extends BaseStatusBar implements
     private boolean mClockDoubleClicked;
     private View mDateTimeView;
 
+    private boolean mFlipStatusBar;
+
     public Context getContext() { return mContext; }
 
     @Override
@@ -302,7 +304,7 @@ public class TabletStatusBar extends BaseStatusBar implements
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
-        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        lp.gravity = Gravity.BOTTOM | (mFlipStatusBar ? Gravity.LEFT : Gravity.RIGHT);
         lp.setTitle("NotificationPanel");
         lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
@@ -332,7 +334,7 @@ public class TabletStatusBar extends BaseStatusBar implements
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
-        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        lp.gravity = Gravity.BOTTOM | (mFlipStatusBar ? Gravity.LEFT : Gravity.RIGHT);
         lp.setTitle("InputMethodsPanel");
         lp.windowAnimations = R.style.Animation_RecentPanel;
 
@@ -355,7 +357,7 @@ public class TabletStatusBar extends BaseStatusBar implements
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
-        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        lp.gravity = Gravity.BOTTOM | (mFlipStatusBar ? Gravity.LEFT : Gravity.RIGHT);
         lp.setTitle("CompatModePanel");
         lp.windowAnimations = android.R.style.Animation_Dialog;
 
@@ -494,8 +496,11 @@ public class TabletStatusBar extends BaseStatusBar implements
 
         loadDimens();
 
+        mFlipStatusBar = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SGT7_TABLET_FLIPPED, 0) == 1;
+
         final TabletStatusBarView sb = (TabletStatusBarView)View.inflate(
-                context, R.layout.system_bar, null);
+                context, mFlipStatusBar ? R.layout.system_bar_flipped : R.layout.system_bar, null);
         mStatusBarView = sb;
 
         sb.setHandler(mHandler);

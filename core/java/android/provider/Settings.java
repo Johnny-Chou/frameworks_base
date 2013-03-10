@@ -3061,6 +3061,17 @@ public final class Settings {
          */
         public static final String MVNO_ROAMING = "mvno_roaming";
 
+/* 
+** --------------------------------- ---------- ----- --- -
+** :: [ AOKP SGT7 ADDITIONS ] ::::::::::: :  :    :
+** ------------------------------ ----- -- - 
+*/
+
+        /**
+         * @hide
+         */
+        public static final String SGT7_TABLET_FLIPPED = "sgt7_tablet_flipped";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.

@@ -41,6 +41,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -1181,4 +1182,24 @@ public abstract class BaseStatusBar extends SystemUI implements
         KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
+
+    private static class SettingsObserver extends ContentObserver {
+        private Handler mHandler;
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+            mHandler = handler;
+        }
+
+        void observe(Context context) {
+            ContentResolver resolver = context.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SGT7_TABLET_FLIPPED), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    };
 }
