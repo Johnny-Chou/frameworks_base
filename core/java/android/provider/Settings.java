@@ -1788,6 +1788,24 @@ public final class Settings {
          */
         public static final String MODE_RINGER_STREAMS_AFFECTED = "mode_ringer_streams_affected";
 
+        /**
+         * Custom automatic brightness light sensor levels.
+         * The value is a comma separated int array with length N.
+         * Example: "100,300,3000".
+         *
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_LUX = "auto_brightness_lux";
+
+        /**
+         * Custom automatic brightness display backlight brightness values.
+         * The value is a comma separated int array with length N+1.
+         * Example: "10,50,100,255".
+         *
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_BACKLIGHT = "auto_brightness_backlight";
+
          /**
           * Determines which streams are affected by mute. The
           * stream type's bit should be set to 1 if it should be muted when a mute request
@@ -2762,9 +2780,15 @@ public final class Settings {
         
         /**
          * Statusbar toggle for quick settings
-         * &hide
+         * @hide
          */
         public static final String STATUSBAR_QUICK_TOGGLE = "statusbar_quick_toggle";
+
+        /**
+         * Screenshot toggle delay
+         * @hide
+         */
+        public static final String SCREENSHOT_TOGGLE_DELAY = "screenshot_toggle_delay";
 
     	  /**
          * Show the NavBar dialog in Power menu
@@ -2788,9 +2812,14 @@ public final class Settings {
         public static final String POWER_DIALOG_SHOW_TORCH_TOGGLE = "power_dialog_show_torch_toggle";
 
          /**
-         * Show the Reboot on lockscreen dialog in Power menu
          * @hide
          */
+        public static final String POWER_DIALOG_SHOW_VOLUME_STATE_TOGGLE = "power_dialog_show_volume_state_toggle";
+
+        /**
+        *Show the Reboot on lockscreen dialog in Power menu
+        * @hide
+        */
         public static final String POWER_DIALOG_SHOW_REBOOT_KEYGUARD = "power_dialog_show_reboot_keyguard";
 
         /**
@@ -3117,6 +3146,80 @@ public final class Settings {
          * @hide
          */
         public static final String SYSTEM_POWER_CRT_MODE = "system_power_crt_mode";
+
+        /**
+         * @hide
+         */
+        public static final String CUSTOM_TOGGLE_ADVANCED = "custom_toggle_advanced";
+
+        /**
+         * @hide
+         */
+        public static final String CUSTOM_TOGGLE_REVERT = "custom_toggle_revert";
+
+        /**
+         * @hide
+         */
+        public static final String DCLICK_TOGGLE_REVERT = "dclick_toggle_revert";
+
+        /**
+         * @hide
+         */
+        public static final String MATCH_ACTION_ICON = "match_action_icon";
+
+        /**
+         * @hide
+         */
+        public static final String COLLAPSE_SHADE = "collapse_shade";
+
+        /**
+         * @hide
+         */
+        public static final String CUSTOM_TOGGLE_QTY = "custom_toggle_qty";
+
+        /**
+         * @hide
+         */
+        public static final String[] CUSTOM_PRESS_TOGGLE = new String[] {
+            "toggle_custom_app_intent_0",
+            "toggle_custom_app_intent_1",
+            "toggle_custom_app_intent_2",
+            "toggle_custom_app_intent_3",
+            "toggle_custom_app_intent_4",
+        };
+
+        /**
+         * @hide
+         */
+        public static final String[] CUSTOM_LONGPRESS_TOGGLE = new String[] {
+            "toggle_custom_app_longintent_0",
+            "toggle_custom_app_longintent_1",
+            "toggle_custom_app_longintent_2",
+            "toggle_custom_app_longintent_3",
+            "toggle_custom_app_longintent_4",
+        };
+
+        /**
+         * @hide
+         */
+        public static final String[] CUSTOM_TOGGLE_ICONS = new String[] {
+            "custom_toggle_icons_0",
+            "custom_toggle_icons_1",
+            "custom_toggle_icons_2",
+            "custom_toggle_icons_3",
+            "custom_toggle_icons_4",
+        };
+
+        /**
+         * @hide
+         */
+        public static final String[] CUSTOM_TOGGLE_TEXT = new String[] {
+            "custom_toggle_text_0",
+            "custom_toggle_text_1",
+            "custom_toggle_text_2",
+            "custom_toggle_text_3",
+            "custom_toggle_text_4",
+        };
 
         /**
          * @hide
