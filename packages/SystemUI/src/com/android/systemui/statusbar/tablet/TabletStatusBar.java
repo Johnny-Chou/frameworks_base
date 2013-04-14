@@ -44,6 +44,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.storage.StorageManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -216,6 +217,7 @@ public class TabletStatusBar extends BaseStatusBar implements
     private View mDateTimeView;
 
     private boolean mFlipStatusBar;
+    private StorageManager mStorageManager;
 
     public Context getContext() { return mContext; }
 
@@ -369,6 +371,11 @@ public class TabletStatusBar extends BaseStatusBar implements
 
         ScrollView scroller = (ScrollView)mPile.getParent();
         scroller.setFillViewport(true);
+
+	// storage
+	mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+	mStorageManager.registerListener(
+		new com.android.systemui.usb.StorageNotification(context));
 
         mDateTimeView = mNotificationPanel.findViewById(R.id.datetime);
         if (mDateTimeView != null) {
