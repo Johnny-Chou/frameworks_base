@@ -1017,11 +1017,18 @@ public class TabletStatusBar extends BaseStatusBar implements
     }
 
     public void showClock(boolean show) {
+        int mClockStyle = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUSBAR_CLOCK_STYLE, 1));
         View clock = mBarContents.findViewById(R.id.clock);
+        View cclock = mBarContents.findViewById(R.id.center_clock);
         View network_text = mBarContents.findViewById(R.id.network_text);
-        if (clock != null) {
+        if ((clock != null) && (mClockStyle == 1)) {
             clock.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+            cclock.setVisibility(show ? View.GONE : View.VISIBLE);
+        } else if ((cclock != null) && (mClockStyle == 2)) {
+            clock.setVisibility(show ? View.GONE : View.VISIBLE);
+            cclock.setVisibility(show ? View.VISIBLE : View.GONE);
+	}
         if (network_text != null) {
             network_text.setVisibility((!show) ? View.VISIBLE : View.GONE);
         }
