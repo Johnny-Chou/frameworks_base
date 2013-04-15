@@ -23,6 +23,7 @@ public class BrightnessToggle extends BaseToggle implements BrightnessStateChang
 
     // get these out of here
     private Dialog mBrightnessDialog;
+    private boolean mAutoBrightnessAvailable = true;
 
     BrightnessController mBrightnessController;
 
@@ -39,6 +40,10 @@ public class BrightnessToggle extends BaseToggle implements BrightnessStateChang
         mBrightnessDialogShortTimeout =
                 mContext.getResources().getInteger(
                         R.integer.quick_settings_brightness_dialog_short_timeout);
+	mAutoBrightnessAvailable = 
+                mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_automatic_brightness_available);
+
         onBrightnessLevelChanged();
     }
 
@@ -86,6 +91,9 @@ public class BrightnessToggle extends BaseToggle implements BrightnessStateChang
             mBrightnessDialog.getWindow().getAttributes().privateFlags |=
                     WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
             mBrightnessDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            if (!mAutoBrightnessAvailable) {
+                ((ToggleSlider) mBrightnessDialog.findViewById(R.id.brightness_slider)).hideToggle();
+            }
         }
         if (!mBrightnessDialog.isShowing()) {
             try {
@@ -123,7 +131,7 @@ public class BrightnessToggle extends BaseToggle implements BrightnessStateChang
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
                 Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
                 UserHandle.USER_CURRENT);
-        boolean autoBrightness =
+        boolean autoBrightness = mAutoBrightnessAvailable &&
                 (mode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
         int iconId = autoBrightness
                 ? R.drawable.ic_qs_brightness_auto_on
