@@ -3249,6 +3249,11 @@ public final class Settings {
         public static final String SGT7_TABLET_FLIPPED = "sgt7_tablet_flipped";
 
         /**
+         * @hide
+         */
+        public static final String SGT7_UMS_NOTIFICATION_CONNECT = "sgt7_ums_notification_connect";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
