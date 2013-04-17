@@ -51,4 +51,10 @@
     <!-- How far to slide the panel out when you touch it -->
     <!-- On tablets this is just the close_handle_height -->
     <dimen name="peek_height">@dimen/close_handle_height</dimen>
+
+    <!--  Height of NavRing in Tablet Mode Landscape -->
+    <dimen name="navring_height_tablet_landscape">380dp</dimen>
+    <!--  Height of NavRing in Tablet Mode Portrait -->
+    <dimen name="navring_height_tablet_portrait">290dp</dimen>
+
 </resources>

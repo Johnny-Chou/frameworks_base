@@ -315,6 +315,9 @@ public class SearchPanelView extends FrameLayout implements
         mLongPress = false;
         mSearchPanelLock = false;
 
+        mContentResolver = mContext.getContentResolver();
+	mLefty = Settings.System.getBoolean(mContentResolver, Settings.System.SGT7_TABLET_FLIPPED, false);
+
         String tgtCenter = Settings.System.getString(mContext.getContentResolver(), Settings.System.SYSTEMUI_NAVRING[0]);
         if (TextUtils.isEmpty(tgtCenter)) {
             Settings.System.putString(mContext.getContentResolver(), Settings.System.SYSTEMUI_NAVRING[0], AwesomeConstant.ACTION_ASSIST.value());
@@ -331,11 +334,12 @@ public class SearchPanelView extends FrameLayout implements
                 if (isScreenPortrait()) { // NavRing on Bottom
                     startPosOffset =  1;
                     endPosOffset =  (mNavRingAmount) + 1;
+/*
                 } else if (mLefty) { // either lefty or... (Ring is actually on right side of screen)
                         startPosOffset =  1 - (mNavRingAmount % 2);
                         middleBlanks = mNavRingAmount + 2;
                         endPosOffset = 0;
-
+*/
                 } else { // righty... (Ring actually on left side of tablet)
                     startPosOffset =  (Math.min(1,mNavRingAmount / 2)) + 2;
                     endPosOffset =  startPosOffset - 1;

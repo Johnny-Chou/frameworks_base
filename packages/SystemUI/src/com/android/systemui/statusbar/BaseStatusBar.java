@@ -448,6 +448,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected void updateSearchPanel() {
         // Search Panel
         boolean visible = false;
+	boolean mTabletFlipped = false;
         if (mSearchPanelView != null) {
             visible = mSearchPanelView.isShowing();
             mWindowManager.removeView(mSearchPanelView);
@@ -461,8 +462,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                     R.layout.status_bar_search_panel, tmpRoot, false);
                 break;
             case 1 : // Tablet Mode
+		mTabletFlipped = Settings.System.getBoolean(mContext.getContentResolver(), Settings.System.SGT7_TABLET_FLIPPED, false);
                 mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
-                    R.layout.status_bar_search_panel_tablet, tmpRoot, false);
+                    (mTabletFlipped ? R.layout.status_bar_search_panel_tablet_flipped : R.layout.status_bar_search_panel_tablet), tmpRoot, false);
                 break;
             case 2 : // Phablet Mode
                 mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
