@@ -58,6 +58,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -933,10 +934,18 @@ final class ActivityStack {
         int w = mThumbnailWidth;
         int h = mThumbnailHeight;
         if (w < 0) {
+
+            boolean largeThumbs = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.SGT7_LARGE_RECENT_THUMBS, 0) == 1;
+
             mThumbnailWidth = w =
-                res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_width);
+                    res.getDimensionPixelSize(largeThumbs ?
+                    com.android.internal.R.dimen.thumbnail_width_large :
+                    com.android.internal.R.dimen.thumbnail_width);
             mThumbnailHeight = h =
-                res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_height);
+                    res.getDimensionPixelSize(largeThumbs ?
+                    com.android.internal.R.dimen.thumbnail_height_large :
+                    com.android.internal.R.dimen.thumbnail_height);
         }
 
         if (w > 0) {

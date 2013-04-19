@@ -3254,6 +3254,13 @@ public final class Settings {
         public static final String SGT7_UMS_NOTIFICATION_CONNECT = "sgt7_ums_notification_connect";
 
         /**
+         * @hide
+         */
+        public static final String SGT7_LARGE_RECENT_THUMBS = "sgt7_large_recent_thumbs";
+
+/** * END SECTION * **/
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
