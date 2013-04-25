@@ -3258,6 +3258,16 @@ public final class Settings {
          */
         public static final String SGT7_LARGE_RECENT_THUMBS = "sgt7_large_recent_thumbs";
 
+        /**
+         * @hide
+         */
+        public static final String SGT7_GPU_OVERCLOCK = "sgt7_gpu_overclock";
+
+        /**
+         * @hide
+         */
+        public static final String SGT7_TOUCHSCREEN_CLOCK = "sgt7_touchscreen_clock";
+
 /** * END SECTION * **/
 
         /**
