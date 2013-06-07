@@ -286,6 +286,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mUserNavBarWidth;
     int mUserUIMode; //User selected UI Mode (Phablet/Tablet, etc)
     int mStockUIMode; // UI Mode as dictated by screen size.
+    private Intent closeAppWindow;
 
     WindowState mKeyguard = null;
     KeyguardViewMediator mKeyguardMediator;
@@ -1190,7 +1191,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case 1 :
                 // "tablet" UI with a single combined status & navigation bar
-                mNavBarAutoHide = false; // TabUI, No AutoHide for you!
+                //mNavBarAutoHide = false; // TabUI, No AutoHide for you!
                 mHasSystemNavBar = true;
                 mNavigationBarCanMove = false;
                 break;
@@ -1276,6 +1277,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     public void updateSettings() {
+        closeAppWindow = new Intent();
+        closeAppWindow.setAction("com.android.systemui.ACTION_HIDE_APP_WINDOW");
         ContentResolver resolver = mContext.getContentResolver();
         boolean updateRotation = false;
         synchronized (mLock) {
@@ -1373,7 +1376,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Settings.System.USER_UI_MODE,mStockUIMode)) {
             resetScreenHelper();
         }
-        if (NavHide != mNavBarAutoHide && mUserUIMode != 1) {
+        if (NavHide != mNavBarAutoHide) {
             mNavBarAutoHide = NavHide;
             resetScreenHelper();
         }
@@ -1733,7 +1736,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     public int getNonDecorDisplayHeight(int fullWidth, int fullHeight, int rotation) {
-        if (mHasSystemNavBar) {
+        if (mHasSystemNavBar && !mNavBarAutoHide) {
             // For the system navigation bar, we always place it at the bottom.
             return fullHeight - mNavigationBarHeightForRotation[rotation];
         }
@@ -2096,6 +2099,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     /** {@inheritDoc} */
     @Override
     public long interceptKeyBeforeDispatching(WindowState win, KeyEvent event, int policyFlags) {
+        mContext.sendBroadcastAsUser(closeAppWindow, UserHandle.ALL);
         final boolean keyguardOn = keyguardOn();
         int keyCode = event.getKeyCode();
         final int repeatCount = event.getRepeatCount();

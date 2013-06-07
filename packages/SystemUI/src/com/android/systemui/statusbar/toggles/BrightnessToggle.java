@@ -32,7 +32,7 @@ public class BrightnessToggle extends BaseToggle implements BrightnessStateChang
     private int mBrightnessDialogShortTimeout;
 
     @Override
-    protected void init(Context c, int style) {
+    public void init(Context c, int style) {
         super.init(c, style);
         mBrightnessDialogLongTimeout =
                 mContext.getResources().getInteger(
