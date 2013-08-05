@@ -3663,6 +3663,8 @@ public final class Settings {
         public static final String MVNO_ROAMING = "mvno_roaming";
         public static final String THEME_WALLPAPER = "theme_wallpaper";
 
+        public static final String DRAWER_TRANSITION = "drawer_transition";
+        
 /* 
 ** --------------------------------- ---------- ----- --- -
 ** :: [ AOKP SGT7 ADDITIONS ] ::::::::::: :  :    :
