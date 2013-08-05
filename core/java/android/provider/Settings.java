@@ -3004,11 +3004,6 @@ public final class Settings {
         public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
 
         /**
-         * Option To Colorize ALL Nav Icons
-         */
-        public static final String NAVIGATION_BAR_ALLCOLOR = "navigation_bar_allcolor";
-
-        /**
          * @hide
          */
         public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
@@ -3555,6 +3550,13 @@ public final class Settings {
          * @hide
          */
         public static final String QUICK_TOGGLE_FAV_CONTACT = "quick_toggle_fav_contact";
+
+        /**
+         * enable and disable shade collapse on click
+         *
+         * @hide
+         */
+        public static final String SHADE_COLLAPSE_ALL = "shade_collapse_all";
 
         /**
          * enable and disable fast toggle in settings
