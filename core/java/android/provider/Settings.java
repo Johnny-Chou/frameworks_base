@@ -3698,6 +3698,16 @@ public final class Settings {
          */
         public static final String SGT7_TOUCHSCREEN_CLOCK = "sgt7_touchscreen_clock";
 
+        /**
+         * @hide
+         */
+        public static final String SGT7_DEEP_IDLE = "sgt7_deep_idle";
+
+        /**
+         * @hide
+         */
+        public static final String SGT7_WIFI_PM = "sgt7_wifi_pm";
+
 /** * END SECTION * **/
 
         /**
