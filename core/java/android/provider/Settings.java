@@ -2694,7 +2694,7 @@ public final class Settings {
 
        /**
         * Key to store Torch state.
-        * @hide 
+        * @hide
         */
         public static final String TORCH_STATE = "torch_state";
 
@@ -2827,14 +2827,14 @@ public final class Settings {
 
         /**
          * How long to keep the notification LED on (in milliseconds)
-         * 
+         *
          * @hide
          */
         public static final String NOTIFICATION_LIGHT_ON = "notification_light_on";
 
         /**
          * How long to keep the notification LED off (in milliseconds)
-         * 
+         *
          * @hide
          */
         public static final String NOTIFICATION_LIGHT_OFF = "notification_light_off";
@@ -2914,7 +2914,7 @@ public final class Settings {
 
         /**
          * Current UI Mode
-         * 
+         *
          *  0 = Phone UI
          *  1 = Tablet UI
          *  2 = Phablet UI
@@ -2924,7 +2924,7 @@ public final class Settings {
 
         /**
          * User selected UI Mode
-         * 
+         *
          *  0 = Phone UI
          *  1 = Tablet UI
          *  2 = Phablet UI
@@ -2958,7 +2958,7 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_HIDDEN = "statusbar_hidden";
-        
+
         /**
          * Statusbar toggle for quick settings
          * @hide
@@ -3654,7 +3654,7 @@ public final class Settings {
 
         /**
          * enabled and order of quick toggles
-         * 
+         *
          * @hide
          */
         public static final String QUICK_TOGGLES = "quick_toggles";
@@ -3787,6 +3787,12 @@ public final class Settings {
          * @hide
          */
         public static final String MVNO_ROAMING = "mvno_roaming";
+
+        /**
+         * Trebuchet - drawer transitions
+         * @hide
+         */
+        public static final String DRAWER_TRANSITION = "drawer_transition";
 
         public static final String THEME_WALLPAPER = "theme_wallpaper";
 
