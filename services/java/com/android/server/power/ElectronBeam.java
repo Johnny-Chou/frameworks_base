@@ -93,6 +93,7 @@ final class ElectronBeam {
     private int mElectronBeamMode;
     private boolean mIsLandscape;
 
+
     // Texture names.  We only use one texture, which contains the screenshot.
     private final int[] mTexNames = new int[1];
     private boolean mTexNamesGenerated;
@@ -141,6 +142,7 @@ final class ElectronBeam {
         // Get the display size and layer stack.
         // This is not expected to change while the electron beam surface is showing.
         DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
+
         mDisplayLayerStack = displayInfo.layerStack;
         mDisplayWidth = displayInfo.getNaturalWidth();
         mDisplayHeight = displayInfo.getNaturalHeight();
@@ -553,7 +555,7 @@ final class ElectronBeam {
             mSurfaceControl.setSize(mDisplayWidth, mDisplayHeight);
             mSurface = new Surface();
             mSurface.copyFrom(mSurfaceControl);
-            
+
             mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurfaceControl);
             mSurfaceLayout.onDisplayTransaction();
         } finally {
